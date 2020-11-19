@@ -48,8 +48,6 @@ module powerbi.extensibility.visual {
             const vectorProperty = choroSettings.getCurrentVectorProperty()
             const zeroFilter = ["==", vectorProperty, ""]
             let fillType = this.getFillType(choroSettings)
-            let fillColorType = fillType.color
-            let fillOpacityType = fillType.opacity
             const layers = {};
             layers[Choropleth.ID] = mapboxUtils.decorateLayer({
                 id: Choropleth.ID,
@@ -82,10 +80,6 @@ module powerbi.extensibility.visual {
                 id: Choropleth.HighlightID,
                 type: fillType.type,
                 source: 'choropleth-source',
-                paint: {
-                    fillColorType : choroSettings.highlightColor,
-                    fillOpacityType: 1
-                },
                 "source-layer": sourceLayer,
                 filter: zeroFilter
             });
