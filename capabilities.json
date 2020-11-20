@@ -986,6 +986,25 @@
           "displayNameKey": "selectedLevel",
           "description": "Select a level to join."
         },
+        "geometryType": {
+          "type": {
+            "enumeration": [
+              {
+                "value": "LineString",
+                "displayName": "LineString",
+                "displayNameKey": "LineString"
+              },
+              {
+                "value": "Polygon",
+                "displayName": "Polygon",
+                "displayNameKey": "Polygon"
+              }
+            ]
+          },
+          "displayName": "Geometry",
+          "displayNameKey": "choroplethGeometryType",
+          "description": "Display geometry as lingstring or polygon"
+        },
         "data1": {
           "type": {
             "enumeration": [
