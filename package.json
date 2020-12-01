@@ -1,6 +1,6 @@
 {
   "name": "mapboxgl-powerbi",
-  "version": "1.5.0.intele",
+  "version": "20201201",
   "description": "Mapbox Visual for Power BI",
   "main": "index.js",
   "scripts": {
