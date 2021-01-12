@@ -36,9 +36,10 @@ module powerbi.extensibility.visual {
                     if (feature.geometry.type === 'Point' && turf.booleanContains(sel_pol, feature)) {
                         return true;
                     }
-                    if ((feature.geometry.type === 'Polygon' || feature.geometry.type === 'Linestring') &&
-                       (turf.booleanOverlap(feature, sel_pol) || turf.booleanContains(sel_pol, feature) ||
-                        turf.booleanContains(feature, sel_pol)
+                    if (
+                        (feature.geometry.type === 'Polygon' || feature.geometry.type === 'Linestring') &&
+                        (turf.booleanOverlap(feature, sel_pol) || turf.booleanContains(sel_pol, feature) || 
+                         turf.booleanContains(feature, sel_pol)
                     )) {
                         return true;
                     }
@@ -73,7 +74,13 @@ module powerbi.extensibility.visual {
                             }
                         };
                     }
-
+                    
+                    // if it is a LineString, we just add the feature
+                    if (feature.geometry.type === 'LineString') {
+                        acc.push(feature);
+                        return acc;
+                    }
+                    
                     return acc;
                 }, []);
 
