@@ -1,18 +1,18 @@
 {
   "visual": {
-    "name": "mapboxGLMap",
-    "displayName": "Mapbox Visual",
+    "name": "Intelematics - mapboxGLMap",
+    "displayName": "Intelematics - Mapbox Visual",
     "guid": "PBI_CV_EB3A4088_75C5_4746_9D8B_255A7B7ECD6D",
     "visualClassName": "MapboxMap",
-    "version": "20201201",
+    "version": "20200113-1",
     "description": "Visualize massive location data with custom map styles, using circle, heatmap, choropleth, and cluster layers.",
     "supportUrl": "www.mapbox.com/help",
     "gitHubUrl": "https://github.com/mapbox/mapboxgl-powerbi"
   },
   "apiVersion": "1.13.0",
   "author": {
-    "name": "Mapbox",
-    "email": "ryan.baumann@mapbox.com"
+    "name": "Intelematics - Mapbox",
+    "email": "john.Luan@intelematics.com, ethan.ho@intelematics.com"
   },
   "assets": {
     "icon": "assets/icon.png"

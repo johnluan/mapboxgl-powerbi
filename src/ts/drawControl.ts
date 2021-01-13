@@ -78,10 +78,8 @@ module powerbi.extensibility.visual {
                     // Split the feature into linestrings, if it is a MultiLineString
                     if (feature.geometry.type === 'MultiLineString') {
                         for (let linestring of feature.geometry.coordinates) {
-                            console.log(turf.helpers.lineString(linestring))
                             if (selectFeature(selection_poly, turf.helpers.lineString(linestring))) {
                                 acc.push(feature);
-                                console.log(acc);
                                 return acc;
                             }
                         };
