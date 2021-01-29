@@ -61,6 +61,7 @@ typings/
 # Compiled files
 src/ts/*.js*
 src/ts/**/*.js*
+src/js/turf-bundle.js
 .tmp
 
 # Editor files

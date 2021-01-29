@@ -149,6 +149,8 @@ module powerbi.extensibility.visual {
         static readonly US_STATES_SOURCE_LAYER = "pbi-us-states";
         static readonly US_COUNTIES_SOURCE_LAYER = "pbi-us-counties";
         static readonly US_POSTCODES_SOURCE_LAYER = "pbi-us-postcodes";
+        static readonly GEOMETRY_POLYGON = "Polygon";
+        static readonly GEOMETRY_LINESTRING = "LineString";
 
         static readonly PREDEFINED_VECTOR_PROPERTY = "name";
 
@@ -171,6 +173,8 @@ module powerbi.extensibility.visual {
         public maxLevel: number = 1
         public selectedLevel: string = '1'
         public currentLevel: number = 1;
+
+        public geometryType: string = ChoroplethSettings.GEOMETRY_LINESTRING;  // Let US states be the default
 
         public data1: string = ChoroplethSettings.US_STATES_TILE_URL;  // Let US states be the default
         public vectorTileUrl1: string = ChoroplethSettings.GLOBAL_COUNTRIES_TILE_URL;

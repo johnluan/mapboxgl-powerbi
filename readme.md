@@ -1,3 +1,35 @@
+## FOREWORD: this repo was copied from https://github.com/mapbox/mapboxgl-powerbi
+<br /><hr />
+
+# How To
+## Setup dev environment
+- warning: YMMV, a bit of a trial and error atm, we have some version dependancies nightmare going on
+- quirks:
+  - looking at `package.json`, we need to compile some codes in nodejs `v1.5.0`, e.g. <br />
+    - `src/build/turf.js`, see `package.json` -> `turf-build` (run this  with `npm run turf-build`)
+    - browserify also needs to be installed via node v1.5.0 somehow
+  - but from information gathered, we need pbiviz `2.6.0` that runs on nodejs `v6.0.0`, weird <br />
+    so we need to run the `pbiviz package` in pbiviz `2.6.0`
+- to start, best to install `nvm` (node version manager, so we can switch between node versions): <br/>
+  `brew update && brew install nvm`
+- install node and packages: <br />
+  - node `v1.5.0` (`iojs-v1.5.0`)
+    - installs node `v1.5.0` - `nvm install iojs-v1.5.0`<br />
+    - switch to `v1.5.0` - `nvm use v1.5.0` <br />
+    - installs browserify (doesnt work with node v6.0.0) - `npm install -g browserify`<br />
+  - node `v6.0.0`
+    - installs node `v6.0.0` - `nvm install v6.0.0`<br />
+    - switch to `v6.0.0` - `nvm use v6.0.0`, <br />
+    - to complete the local package installs - `npm install`
+    - install pbiviz `2.6.0` - `npm i -g powerbi-visuals-tools@2.6.0`
+- now we should be set, for dev and package follow the steps: 
+  - from my understanding, any js code change that needs recompile, will need to be compiled with nodejs `v1.5.0`
+  - also some hacky steps, please see [Hacky stuff to make things work](hack.md)
+  - then anything to with powerbi e.g. packaging will need to be run on nodejs `v6.0.0`
+- you can explore the various commands available in `package.json` -> `scripts` <br />
+  to run them would be `npm run xxx`, e.g `npm run turf-build`
+<br /><br />
+# Original README.md from source repo
 <a href="https://www.mapbox.com">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Mapbox_Logo.svg/1280px-Mapbox_Logo.svg.png" width="500"/>
 </a>

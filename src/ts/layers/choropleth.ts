@@ -47,11 +47,11 @@ module powerbi.extensibility.visual {
             const sourceLayer = choroSettings.getCurrentSourceLayer()
             const vectorProperty = choroSettings.getCurrentVectorProperty()
             const zeroFilter = ["==", vectorProperty, ""]
-
+            let fillType = this.getFillType(choroSettings)
             const layers = {};
             layers[Choropleth.ID] = mapboxUtils.decorateLayer({
                 id: Choropleth.ID,
-                type: "fill",
+                type: fillType.type,
                 source: 'choropleth-source',
                 "source-layer": sourceLayer
             });
@@ -78,12 +78,8 @@ module powerbi.extensibility.visual {
             });
             layers[Choropleth.HighlightID] = mapboxUtils.decorateLayer({
                 id: Choropleth.HighlightID,
-                type: 'fill',
+                type: fillType.type,
                 source: 'choropleth-source',
-                paint: {
-                    "fill-color": choroSettings.highlightColor,
-                    "fill-opacity": 1
-                },
                 "source-layer": sourceLayer,
                 filter: zeroFilter
             });
@@ -147,8 +143,9 @@ module powerbi.extensibility.visual {
             const vectorProperty = choroSettings.getCurrentVectorProperty()
             const zeroFilter = ["==", vectorProperty, ""]
             const map = this.parent.getMap();
+            let fillType = this.getFillType(this.settings)
 
-            map.setPaintProperty(Choropleth.ID, 'fill-opacity', choroSettings.opacity / 100);
+            map.setPaintProperty(Choropleth.ID, fillType.opacity, choroSettings.opacity / 100);
             map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-opacity', choroSettings.opacity / 100);
             map.setFilter(Choropleth.HighlightID, zeroFilter);
             map.setFilter(Choropleth.HighlightOutlineID, zeroFilter);
@@ -181,8 +178,9 @@ module powerbi.extensibility.visual {
 
             this.filter.addSelection(selectionIds, roleMap.location)
 
+            let fillType = this.getFillType(this.settings)
             const opacity = this.filter.getSelectionOpacity(choroSettings.opacity)
-            map.setPaintProperty(Choropleth.ID, 'fill-opacity', opacity);
+            map.setPaintProperty(Choropleth.ID, fillType.opacity, opacity);
             map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-opacity', opacity);
             map.setFilter(Choropleth.HighlightID, locationFilter);
             map.setFilter(Choropleth.HighlightOutlineID, locationFilter);
@@ -229,7 +227,10 @@ module powerbi.extensibility.visual {
         }
 
         setCalculatedProps(map: any, colors: object, sizes: object | number, roleMap) {
-            map.setPaintProperty(Choropleth.ID, 'fill-color', colors);
+            let fillType = this.getFillType(this.settings)
+            map.setPaintProperty(Choropleth.ID, fillType.color, colors);
+            //this line is an extra bit for line width, if this is polygon, it will be ignored
+            map.setPaintProperty(Choropleth.ID, 'line-width', this.settings.outlineWidth);
             map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-color', colors);
             if (roleMap.size) {
                 map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-height', sizes)
@@ -258,11 +259,19 @@ module powerbi.extensibility.visual {
         }
 
         setFillProps(map: any, settings: ChoroplethSettings) {
-            map.setPaintProperty(Choropleth.ID, 'fill-outline-color', 'rgba(0,0,0,0.05)');
-            map.setPaintProperty(Choropleth.HighlightID, "fill-color", settings.highlightColor)
+            let fillType = this.getFillType(settings)
+            map.setPaintProperty(Choropleth.HighlightID, fillType.color, settings.highlightColor)
             map.setPaintProperty(Choropleth.ExtrusionHighlightID, "fill-extrusion-color", settings.highlightColor)
             map.setPaintProperty(Choropleth.ExtrusionHighlightID, 'fill-extrusion-base', settings.baseHeight);
             map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-base', settings.baseHeight);
+
+            if(fillType.type == 'line'){
+                map.setPaintProperty(Choropleth.HighlightID, 'line-width', settings.outlineWidth)
+                map.setPaintProperty(Choropleth.HighlightOutlineID, 'line-width', settings.outlineWidth)
+                map.setPaintProperty(Choropleth.HighlightOutlineID, 'line-color', settings.highlightColor)
+            }else{
+                map.setPaintProperty(Choropleth.ID, 'fill-outline-color', 'rgba(0,0,0,0.05)');
+            }
         }
 
         setLineProps(map: any, settings: ChoroplethSettings) {
@@ -334,6 +343,7 @@ module powerbi.extensibility.visual {
             const map = this.parent.getMap();
             this.settings = settings.choropleth
             const choroSettings = settings.choropleth;
+            let fillType = this.getFillType(choroSettings);
 
             if (map.getLayer(Choropleth.ID)) {
                 map.setLayoutProperty(Choropleth.ID, 'visibility', choroSettings.display() ? 'visible' : 'none');
@@ -372,7 +382,7 @@ module powerbi.extensibility.visual {
                     this.setCalculatedProps(map, colors, sizes, roleMap)
                     this.setFilters(map, filter, choroSettings)
                 } else {
-                    map.setPaintProperty(Choropleth.ID, 'fill-color', 'rgb(0, 0, 0)');
+                    map.setPaintProperty(Choropleth.ID, fillType.color, 'rgb(0, 0, 0)');
                     map.setPaintProperty(Choropleth.ExtrusionID, 'fill-extrusion-color', 'rgb(0, 0, 0)');
                 }
 
@@ -421,6 +431,20 @@ module powerbi.extensibility.visual {
             })
 
             return result
+        }
+
+        getFillType(settings: ChoroplethSettings){
+            let fillType = 'fill'
+            if(settings.geometryType == ChoroplethSettings.GEOMETRY_LINESTRING){
+                fillType = 'line';
+            }
+            let fillColorType = fillType+'-color'
+            let fillOpacityType = fillType+'-opacity'
+            return {
+                type: fillType,
+                color: fillColorType,
+                opacity: fillOpacityType
+            }
         }
     }
 }
